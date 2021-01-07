@@ -40,7 +40,7 @@ Simple Django REST API for Email Service to customers using SendGrid and MailGun
     }
 
 ## Design
-![alt text](https://i.imgur.com/a/6sr9Pdi)
+[<img src="https://i.imgur.com/iUeCqTI.jpg" alt="Design">]
 
 ## Assumptions
 - Customers using this service can input an email address, subject, message and in return expect an email from the service.
