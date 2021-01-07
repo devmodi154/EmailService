@@ -23,11 +23,16 @@ def response_mail(request)-> Response:
         mail_body = request.POST['mail_body']
 
         # Setting SMTP connection
-        connection = ProviderFactory().setConfigurations('mailgun')
+        connection = ProviderFactory().setConfigurations()
 
-        serializer = MailSerializer(data=request.data)
         # Small template for mail
         html_message = '<blockquote>'+mail_body+'</blockquote><br>'+'<strong>Thank you for using our service!</strong>'
+
+        serializer = MailSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Fail safe mech using multiple providers to send mail
         try:
@@ -55,7 +60,4 @@ def response_mail(request)-> Response:
                 # print(e) LOGGING
                 return Response(serializer.data, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
